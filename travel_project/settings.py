@@ -1,17 +1,20 @@
 """
 Django settings for travel_project project.
 """
-
 from pathlib import Path
 import os
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Секретный ключ (берется из переменных окружения на сервере)
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-n4mtbz!t+7ltk4d(p8#e3ls6rgtmd14@k^rgdgvp7oe4ej5wk9')
 
+# ВАЖНО: Для продакшена всегда False
 DEBUG = False
 
-ALLOWED_HOSTS = ['.netrun.io', '127.0.0.1', 'localhost']
+# Разрешаем запросы с хостинга и локально
+ALLOWED_HOSTS = ['*', '.netrun.io', '127.0.0.1', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -54,11 +57,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'travel_project.wsgi.application'
 
-# База данных (для Netrun)
+# База данных: используем SQLite в постоянной папке /data (для Netrun)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/data/db.sqlite3',
+        'NAME': '/data/db.sqlite3' if os.path.exists('/data') else BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -76,22 +79,13 @@ TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_TZ = True
 
-# ============================================
-# НАСТРОЙКИ СТАТИКИ (ИСПРАВЛЕНО)
-# ============================================
+# Настройки статики (CSS, JS, Картинки)
 STATIC_URL = '/static/'
-
-# Папка, где лежат ваши исходные CSS/JS (для локальной разработки)
 STATICFILES_DIRS = [BASE_DIR / 'static']
-
-# Папка, куда collectstatic будет собирать все файлы для продакшена
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# Включаем сжатие и кэширование статики через WhiteNoise
-# (Используем CompressedStaticFilesStorage, чтобы избежать ошибок с путями)
+STATIC_ROOT = BASE_DIR / 'staticfiles' # Сюда collectstatic соберет файлы
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
-# Медиафайлы (загруженные пользователями картинки)
+# Медиа (загруженные картинки туров)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 

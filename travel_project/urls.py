@@ -8,8 +8,7 @@ urlpatterns = [
     path('', include('travel_agent.urls')),
 ]
 
-# Раздаем только МЕДИА (картинки туров).
-# Статику (CSS/JS) теперь раздает WhiteNoise автоматически.
+# Раздаем медиафайлы (картинки). Статику раздает WhiteNoise.
 urlpatterns += [
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
