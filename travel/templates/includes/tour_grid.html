@@ -1,0 +1,24 @@
+<div class="tours-grid">
+    {% for tour in tours %}
+    <article class="tour-card">
+        {% if tour.image %}
+            <img src="{{ tour.image.url }}" alt="{{ tour.title }}" class="tour-card__image">
+        {% else %}
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop" alt="{{ tour.title }}" class="tour-card__image">
+        {% endif %}
+        <div class="tour-card__content">
+            <h3 class="tour-card__title">{{ tour.title }}</h3>
+            <p class="tour-card__price">от {{ tour.price|floatformat:0 }} ₽</p>
+            <p class="tour-card__desc">{{ tour.duration }} ночей</p>
+            <a href="{% url 'buy_tour' tour.id %}" class="button button_theme_primary button_size_s">Купить</a>
+        </div>
+    </article>
+    {% empty %}
+    <div style="grid-column: 1 / -1; text-align: center; padding: 40px 0;">
+        <h3 style="color: var(--color-secondary); margin-bottom: 10px;">Ничего не найдено 😔</h3>
+        <p style="color: var(--color-text-light);">
+            По запросу «{{ query }}» туров не найдено. Попробуйте изменить запрос.
+        </p>
+    </div>
+    {% endfor %}
+</div>

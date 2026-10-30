@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="auth section">
+    <div class="container">
+        <div class="auth__wrapper">
+            <h1 class="auth__title">Оплата тура</h1>
+            <p class="auth__subtitle">{{ tour.title }}</p>
+
+            <div style="background: var(--color-bg-light); padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <p><strong>Длительность:</strong> {{ tour.duration }} ночей</p>
+                <p><strong>Цена:</strong> <span style="color: var(--color-primary); font-size: 1.5rem; font-weight: bold;">{{ tour.price|floatformat:0 }} ₽</span></p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <p style="margin-bottom: 20px; font-size: 0.9rem; color: var(--color-text-light);">
+                    Нажимая кнопку «Оплатить», вы подтверждаете списание средств с привязанной карты.
+                </p>
+                <button type="submit" class="button button_theme_primary auth__submit">Оплатить {{ tour.price|floatformat:0 }} ₽</button>
+            </form>
+
+            <p class="auth__footer-text">
+                <a href="{% url 'tour_list' %}" class="auth__link">← Вернуться к турам</a>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

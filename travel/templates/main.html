@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero__container">
+        <div class="hero__content">
+            <h1 class="hero__title">Откройте мир вместе с нами</h1>
+            <p class="hero__subtitle">Незабываемые путешествия по лучшим направлениям. Мы создаем туры, которые запомнятся навсегда.</p>
+            <a href="{% url 'tour_list' %}" class="button button_theme_primary">Найти тур</a>
+        </div>
+        <div class="hero__image">
+            <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&h=400&fit=crop" alt="Путешествие" class="hero__img">
+        </div>
+    </div>
+</section>
+
+<!-- Слайдер с турами -->
+<section class="slider-section section">
+    <div class="container">
+        <h2 class="section__title">Популярные направления</h2>
+
+        <div class="tour-slider-wrapper">
+            <!-- Кнопки управления -->
+            <button class="tour-slider-btn prev" id="tour-prev" aria-label="Назад">&#10094;</button>
+            <button class="tour-slider-btn next" id="tour-next" aria-label="Вперед">&#10095;</button>
+
+            <!-- Лента с карточками -->
+            <div class="tour-slider" id="tour-slider">
+                {% for tour in tours %}
+                <article class="tour-card">
+                    {% if tour.image %}
+                        <img src="{{ tour.image.url }}" alt="{{ tour.title }}" class="tour-card__image">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop" alt="{{ tour.title }}" class="tour-card__image">
+                    {% endif %}
+                    <div class="tour-card__content">
+                        <h3 class="tour-card__title">{{ tour.title }}</h3>
+                        <p class="tour-card__price">от {{ tour.price|floatformat:0 }} ₽</p>
+                        <p class="tour-card__desc">{{ tour.duration }} ночей</p>
+                        <a href="{% url 'buy_tour' tour.id %}" class="button button_theme_primary button_size_s">Купить</a>
+                    </div>
+                </article>
+                {% empty %}
+                <p style="width: 100%; text-align: center; color: var(--color-text-light);">Туры пока не добавлены.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{% url 'tour_list' %}" class="button button_theme_secondary">Смотреть все туры</a>
+        </div>
+    </div>
+</section>
+
+<section class="features section">
+    <div class="container">
+        <h2 class="section__title">Почему выбирают нас</h2>
+        <div class="features__grid">
+            <article class="feature-card">
+                <div class="feature-card__icon">🌍</div>
+                <h3 class="feature-card__title">Более 50 направлений</h3>
+                <p class="feature-card__text">От экзотических островов до европейских столиц.</p>
+            </article>
+            <article class="feature-card">
+                <div class="feature-card__icon">💰</div>
+                <h3 class="feature-card__title">Лучшие цены</h3>
+                <p class="feature-card__text">Гарантируем честные цены без скрытых комиссий.</p>
+            </article>
+            <article class="feature-card">
+                <div class="feature-card__icon">🛡️</div>
+                <h3 class="feature-card__title">Надежность</h3>
+                <p class="feature-card__text">Более 10 лет на рынке туристических услуг.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="popular-tours section">
+    <div class="container">
+        <h2 class="section__title">Туры недели</h2>
+        <div class="tours-grid">
+            {% for tour in tours|slice:":3" %}
+            <article class="tour-card">
+                {% if tour.image %}
+                    <img src="{{ tour.image.url }}" alt="{{ tour.title }}" class="tour-card__image">
+                {% else %}
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop" alt="{{ tour.title }}" class="tour-card__image">
+                {% endif %}
+                <div class="tour-card__content">
+                    <h3 class="tour-card__title">{{ tour.title }}</h3>
+                    <p class="tour-card__price">от {{ tour.price|floatformat:0 }} ₽</p>
+                    <a href="{% url 'tour_list' %}" class="button button_theme_secondary button_size_s">Подробнее</a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="cta section">
+    <div class="container">
+        <div class="cta__content">
+            <h2 class="cta__title">Готовы к приключениям?</h2>
+            <p class="cta__text">Свяжитесь с нами, и мы подберем идеальный тур для вас.</p>
+            <a href="{% url 'contacts' %}" class="button button_theme_primary">Оставить заявку</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

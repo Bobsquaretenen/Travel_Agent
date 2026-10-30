@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная — Travel Agency</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="header__container">
+            <a href="{% url 'home' %}" class="header__logo logo">
+                <span class="logo__text">Travel</span><span class="logo__highlight">Agency</span>
+            </a>
+            <nav class="header__nav nav" id="main-nav">
+                <ul class="nav__list">
+                    <li class="nav__item"><a href="{% url 'home' %}" class="nav__link">Главная</a></li>
+                    <li class="nav__item"><a href="{% url 'tour_list' %}" class="nav__link">Туры</a></li>
+                    <li class="nav__item"><a href="{% url 'information' %}" class="nav__link">О компании</a></li>
+                    <li class="nav__item"><a href="{% url 'contacts' %}" class="nav__link">Контакты</a></li>
+                </ul>
+            </nav>
+            <div class="header__actions">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'my_tours' %}" class="button button_theme_secondary button_size_s">Мои туры</a>
+                    <a href="{% url 'logout' %}" class="button button_theme_primary button_size_s">Выйти</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="button button_theme_secondary button_size_s">Войти</a>
+                    <a href="{% url 'register' %}" class="button button_theme_primary button_size_s">Регистрация</a>
+                {% endif %}
+            </div>
+            <button class="header__burger burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="main-nav">
+                <span class="burger__line"></span>
+                <span class="burger__line"></span>
+                <span class="burger__line"></span>
+            </button>
+        </div>
+    </header>
+
+
+
+        <main>
+        <!-- Блок вывода системных уведомлений Django -->
+        {% if messages %}
+        <div class="container" style="margin-top: 20px;">
+            {% for message in messages %}
+                <div style="padding: 15px; margin-bottom: 15px; border-radius: var(--radius);
+                            background-color: {% if message.tags == 'success' %}var(--color-success-bg){% elif message.tags == 'warning' %}var(--color-error-bg){% else %}var(--color-bg-light){% endif %};
+                            color: {% if message.tags == 'success' %}var(--color-success){% elif message.tags == 'warning' %}var(--color-error){% else %}var(--color-secondary){% endif %};
+                            border: 1px solid {% if message.tags == 'success' %}var(--color-success){% elif message.tags == 'warning' %}var(--color-error){% else %}var(--color-border){% endif %};">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer__container">
+            <div class="footer__column">
+                <h3 class="footer__title">Travel Agency</h3>
+                <p class="footer__text">Ваш надежный партнер в мире путешествий.</p>
+            </div>
+            <div class="footer__column">
+                <h3 class="footer__title">Навигация</h3>
+                <ul class="footer__list">
+                    <li><a href="{% url 'home' %}" class="footer__link">Главная</a></li>
+                    <li><a href="{% url 'tour_list' %}" class="footer__link">Туры</a></li>
+                    <li><a href="{% url 'information' %}" class="footer__link">О компании</a></li>
+                    <li><a href="{% url 'contacts' %}" class="footer__link">Контакты</a></li>
+                </ul>
+            </div>
+            <div class="footer__column">
+                <h3 class="footer__title">Контакты</h3>
+                <address class="footer__address">
+                    <p>Москва ул. Льва Толстого, 16</p>
+                    <p><a href="tel:+74951234567" class="footer__link">+7 (495) 123-45-67</a></p>
+                    <p><a href="mailto:info@travelagency.ru" class="footer__link">info@travelagency.ru</a></p>
+                </address>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p>&copy; 2025 Travel Agency. Все права защищены.</p>
+            <p><a href="#" class="footer__link">Политика конфиденциальности</a></p>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

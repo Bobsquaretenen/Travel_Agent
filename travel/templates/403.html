@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section" style="min-height: 60vh; display: flex; align-items: center; justify-content: center;">
+    <div class="container" style="text-align: center; max-width: 600px;">
+
+        <!-- Крупная цифра 403 -->
+        <h1 style="font-size: 8rem; font-weight: 700; color: var(--color-primary); line-height: 1; margin-bottom: 1rem;">
+            403
+        </h1>
+
+        <!-- Заголовок -->
+        <h2 class="section__title" style="margin-bottom: 1rem; font-size: 2rem;">
+            Доступ запрещен
+        </h2>
+
+        <!-- Текст ошибки -->
+        <p style="color: var(--color-text-light); margin-bottom: 2.5rem; font-size: 1.125rem; line-height: 1.6;">
+            К сожалению, у вас недостаточно прав для просмотра этой страницы.<br>
+            Возможно, вы пытаетесь зайти в личный кабинет, не авторизовавшись в системе, или срок действия вашей сессии истек.
+        </p>
+
+        <!-- Кнопки действий -->
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="{% url 'home' %}" class="button button_theme_primary">Вернуться на главную</a>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'login' %}" class="button button_theme_secondary">Войти в аккаунт</a>
+            {% endif %}
+        </div>
+
+    </div>
+</section>
+{% endblock %}

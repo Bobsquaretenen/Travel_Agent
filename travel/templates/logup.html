@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="auth section">
+    <div class="container">
+        <div class="auth__wrapper">
+            <h1 class="auth__title">Создать аккаунт</h1>
+            <p class="auth__subtitle">Заполните форму, чтобы зарегистрироваться</p>
+
+            <form action="{% url 'register' %}" method="POST" class="auth__form" id="registerForm" novalidate>
+                {% csrf_token %}
+
+                <!-- Вывод общих ошибок формы, если они есть -->
+                {% if form.non_field_errors %}
+                    <div style="color: #E53935; margin-bottom: 15px; font-size: 14px;">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="form__group">
+                    <label class="form__label">Имя пользователя *</label>
+                    {{ form.username }}
+                    <span style="color: #E53935; font-size: 12px;">{{ form.username.errors }}</span>
+                </div>
+                <div class="form__group">
+                    <label class="form__label">Email *</label>
+                    {{ form.email }}
+                    <span style="color: #E53935; font-size: 12px;">{{ form.email.errors }}</span>
+                </div>
+                <div class="form__group">
+                    <label class="form__label">Телефон *</label>
+                    {{ form.phone }}
+                    <span class="form__error" id="regPhoneError" aria-live="polite"></span>
+                </div>
+                <div class="form__group">
+                    <label class="form__label">Пароль *</label>
+                    {{ form.password1 }}
+                    <span style="color: #E53935; font-size: 12px;">{{ form.password1.errors }}</span>
+                </div>
+                <div class="form__group">
+                    <label class="form__label">Подтверждение пароля *</label>
+                    {{ form.password2 }}
+                    <span class="form__error" id="passwordMatchError" aria-live="polite"></span>
+                    <span style="color: #E53935; font-size: 12px;">{{ form.password2.errors }}</span>
+                </div>
+
+                <div class="form__group form__group_checkbox form__group_checkbox_required">
+                    {{ form.pd_consent }}
+                    <label for="id_pd_consent" class="form__label_checkbox">
+                        Я даю согласие на обработку моих персональных данных в соответствии с
+                        <a href="#" class="auth__link" target="_blank">Политикой конфиденциальности</a>. *
+                    </label>
+                </div>
+
+                <div class="form__group form__group_checkbox form__group_checkbox_required">
+                    {{ form.terms }}
+                    <label for="id_terms" class="form__label_checkbox">
+                        Я принимаю условия <a href="#" class="auth__link" target="_blank">Пользовательского соглашения</a>. *
+                    </label>
+                </div>
+
+                <button type="submit" class="button button_theme_primary auth__submit">Зарегистрироваться</button>
+
+                <p class="auth__footer-text">
+                    Уже есть аккаунт? <a href="{% url 'login' %}" class="auth__link">Войти</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="page-header section">
+    <div class="container">
+        <h1 class="page-header__title">Личный кабинет</h1>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <!-- Уведомления -->
+        {% if messages %}
+            {% for message in messages %}
+                <div style="padding: 15px; margin-bottom: 20px; border-radius: 8px; background-color: {% if message.tags == 'success' %}#F1FBF6{% else %}#FFEBEE{% endif %}; color: {% if message.tags == 'success' %}#28CB8B{% else %}#E53935{% endif %};">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div style="display: flex; gap: 40px; flex-wrap: wrap;">
+            <!-- Блок привязанных карт -->
+            <div style="flex: 1; min-width: 300px;">
+                <h2 style="margin-bottom: 20px; color: var(--color-secondary);">Мои карты</h2>
+                {% if cards %}
+                    <ul style="list-style: none; padding: 0;">
+                        {% for card in cards %}
+                            <li style="background: #263238; color: white; padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: var(--shadow);">
+                                <p style="font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 10px;">{{ card.masked_number }}</p>
+                                <p style="font-size: 0.8rem; opacity: 0.7;">Привязана: {{ card.created_at|date:"d.m.Y" }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p style="color: var(--color-text-light);">У вас пока нет привязанных карт.</p>
+                {% endif %}
+                <a href="{% url 'add_card' %}" class="button button_theme_primary" style="margin-top: 15px;">+ Привязать карту</a>
+            </div>
+
+            <!-- Блок туров -->
+            <div style="flex: 2; min-width: 300px;">
+                <h2 style="margin-bottom: 20px; color: var(--color-secondary);">Действующие туры</h2>
+                {% if active_tours %}
+                    <div class="tours-grid" style="grid-template-columns: 1fr;">
+                        {% for ut in active_tours %}
+                            <div class="tour-card" style="display: flex; flex-direction: row; align-items: center;">
+                                {% if ut.tour.image %}
+                                    <img src="{{ ut.tour.image.url }}" alt="{{ ut.tour.title }}" class="tour-card__image" style="width: 200px; height: 150px; object-fit: cover;">
+                                {% endif %}
+                                <div class="tour-card__content">
+                                    <h3 class="tour-card__title">{{ ut.tour.title }}</h3>
+                                    <p class="tour-card__desc">Куплен: {{ ut.purchase_date|date:"d.m.Y" }}</p>
+                                    <form action="{% url 'complete_tour' ut.id %}" method="POST" style="margin-top: 10px;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="button button_theme_secondary button_size_s">Завершить тур</button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p style="color: var(--color-text-light);">У вас нет активных туров. <a href="{% url 'tour_list' %}" style="color: var(--color-primary);">Выбрать тур</a></p>
+                {% endif %}
+
+                <h2 style="margin-top: 40px; margin-bottom: 20px; color: var(--color-secondary);">Посещенные туры</h2>
+                {% if visited_tours %}
+                    <div class="tours-grid" style="grid-template-columns: 1fr;">
+                        {% for ut in visited_tours %}
+                            <div class="tour-card" style="display: flex; flex-direction: row; align-items: center; opacity: 0.7;">
+                                {% if ut.tour.image %}
+                                    <img src="{{ ut.tour.image.url }}" alt="{{ ut.tour.title }}" class="tour-card__image" style="width: 200px; height: 150px; object-fit: cover; filter: grayscale(100%);">
+                                {% endif %}
+                                <div class="tour-card__content">
+                                    <h3 class="tour-card__title">{{ ut.tour.title }}</h3>
+                                    <p class="tour-card__desc">Статус: Посещен</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p style="color: var(--color-text-light);">Вы пока не посетили ни одного тура.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

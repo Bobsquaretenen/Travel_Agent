@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="auth section">
+    <div class="container">
+        <div class="auth__wrapper">
+            <h1 class="auth__title">Привязка карты</h1>
+            <p class="auth__subtitle">Введите данные карты для оплаты туров (MVP)</p>
+
+            <form method="POST" class="auth__form">
+                {% csrf_token %}
+
+                <div class="form__group">
+                    <label class="form__label">Номер карты *</label>
+                    {{ form.number }}
+                    <span style="color: #E53935; font-size: 12px;">{{ form.number.errors }}</span>
+                </div>
+
+                <div style="display: flex; gap: 15px;">
+                    <div class="form__group" style="flex: 1;">
+                        <label class="form__label">Срок действия *</label>
+                        {{ form.expiry }}
+                        <span style="color: #E53935; font-size: 12px;">{{ form.expiry.errors }}</span>
+                    </div>
+                    <div class="form__group" style="flex: 1;">
+                        <label class="form__label">CVV *</label>
+                        {{ form.cvv }}
+                        <span style="color: #E53935; font-size: 12px;">{{ form.cvv.errors }}</span>
+                    </div>
+                </div>
+
+                <!-- НОВЫЙ БЛОК С СОГЛАСИЕМ -->
+                <div class="form__group form__group_checkbox form__group_checkbox_required" style="margin-top: 20px;">
+                    {{ form.pd_consent }}
+                    <label for="id_pd_consent" class="form__label_checkbox">
+                        Я даю согласие на обработку моих персональных данных (включая данные банковской карты) в соответствии с
+                        <a href="#" class="auth__link" target="_blank" rel="noopener">Политикой конфиденциальности</a>. *
+                    </label>
+                </div>
+                <!-- Вывод ошибки, если галочка не поставлена -->
+                <span style="color: #E53935; font-size: 12px; display: block; margin-bottom: 15px;">
+                    {{ form.pd_consent.errors }}
+                </span>
+
+                <button type="submit" class="button button_theme_primary auth__submit">Привязать карту</button>
+            </form>
+
+            <p class="auth__footer-text">
+                <a href="{% url 'my_tours' %}" class="auth__link">← Вернуться в личный кабинет</a>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

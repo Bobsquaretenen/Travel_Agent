@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section" style="min-height: 60vh; display: flex; align-items: center; justify-content: center;">
+    <div class="container" style="text-align: center; max-width: 600px;">
+
+        <h1 style="font-size: 8rem; font-weight: 700; color: var(--color-error); line-height: 1; margin-bottom: 1rem;">
+            500
+        </h1>
+
+        <h2 class="section__title" style="margin-bottom: 1rem; font-size: 2rem;">
+            Внутренняя ошибка сервера
+        </h2>
+
+        <p style="color: var(--color-text-light); margin-bottom: 2.5rem; font-size: 1.125rem; line-height: 1.6;">
+            Упс! На сервере произошла непредвиденная ошибка.<br>
+            Мы уже работаем над её исправлением. Пожалуйста, попробуйте зайти позже.
+        </p>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="{% url 'home' %}" class="button button_theme_primary">Вернуться на главную</a>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
