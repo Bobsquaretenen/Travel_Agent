@@ -8,7 +8,8 @@ urlpatterns = [
     path('', include('travel_agent.urls')),
 ]
 
-# Раздача медиафайлов (картинок туров). В идеале для продакшена использовать S3/Cloudinary.
+# Раздаем только МЕДИА (картинки туров).
+# Статику (CSS/JS) теперь раздает WhiteNoise автоматически.
 urlpatterns += [
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]

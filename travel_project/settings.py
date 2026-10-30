@@ -5,20 +5,13 @@ Django settings for travel_project project.
 from pathlib import Path
 import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# Ключ будет браться из переменной окружения на Netrun, а локально — запасной.
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-n4mtbz!t+7ltk4d(p8#e3ls6rgtmd14@k^rgdgvp7oe4ej5wk9')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# Разрешаем запросы с Netrun и локально
 ALLOWED_HOSTS = ['.netrun.io', '127.0.0.1', 'localhost']
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -27,12 +20,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'travel_agent', # Наше приложение
+    'travel_agent',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # <-- ДОБАВЛЕНО ДЛЯ СТАТИКИ
+    # ВАЖНО: WhiteNoise должен идти сразу после SecurityMiddleware
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -60,9 +54,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'travel_project.wsgi.application'
 
-
-# Database
-# SQLite в постоянной папке /data (для Netrun)
+# База данных (для Netrun)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -70,8 +62,6 @@ DATABASES = {
     }
 }
 
-
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -79,27 +69,32 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Кастомная модель пользователя
 AUTH_USER_MODEL = 'travel_agent.User'
 
-# Internationalization
 LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
+# ============================================
+# НАСТРОЙКИ СТАТИКИ (ИСПРАВЛЕНО)
+# ============================================
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles' # Папка для collectstatic
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Media files (загрузка картинок туров)
+# Папка, где лежат ваши исходные CSS/JS (для локальной разработки)
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+# Папка, куда collectstatic будет собирать все файлы для продакшена
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Включаем сжатие и кэширование статики через WhiteNoise
+# (Используем CompressedStaticFilesStorage, чтобы избежать ошибок с путями)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+# Медиафайлы (загруженные пользователями картинки)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Настройки для перенаправления при входе/выходе
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
@@ -108,7 +103,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTHENTICATION_BACKENDS = [
     'travel_agent.backends.EmailOrUsernameBackend',
-    'django.contrib.auth.backends.ModelBackend', # Оставляем стандартный как запасной
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 CSRF_FAILURE_VIEW = 'travel_agent.views.csrf_failure'
