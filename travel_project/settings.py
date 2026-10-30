@@ -4,18 +4,19 @@ Django settings for travel_project project.
 
 from pathlib import Path
 import os
-import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# Ключ будет браться из переменной окружения на Netrun, а локально — запасной.
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-n4mtbz!t+7ltk4d(p8#e3ls6rgtmd14@k^rgdgvp7oe4ej5wk9')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = False
 
-ALLOWED_HOSTS = ['.netrun.io', '127.0.0.1', 'localhost', '.onrender.com']
+# Разрешаем запросы с Netrun и локально
+ALLOWED_HOSTS = ['.netrun.io', '127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -26,7 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'travel_agent',
+    'travel_agent', # Наше приложение
 ]
 
 MIDDLEWARE = [
@@ -61,13 +62,14 @@ WSGI_APPLICATION = 'travel_project.wsgi.application'
 
 
 # Database
-# Используем dj_database_url для автоматического переключения между SQLite и PostgreSQL
+# SQLite в постоянной папке /data (для Netrun)
 DATABASES = {
-    'default': dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '/data/db.sqlite3',
+    }
 }
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -91,7 +93,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles' # Папка для collectstatic
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # Сжатие статики
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files (загрузка картинок туров)
 MEDIA_URL = '/media/'
@@ -106,7 +108,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTHENTICATION_BACKENDS = [
     'travel_agent.backends.EmailOrUsernameBackend',
-    'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.ModelBackend', # Оставляем стандартный как запасной
 ]
 
 CSRF_FAILURE_VIEW = 'travel_agent.views.csrf_failure'
