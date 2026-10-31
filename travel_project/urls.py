@@ -15,4 +15,4 @@ urlpatterns += [
 
 handler404 = "travel_agent.views.exception_404"
 handler403 = "travel_agent.views.exception_403"
-handler500 = "travel_agent.views.exception_500"
+handler500 = "travel_agent.views.exception_500" 

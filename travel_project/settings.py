@@ -3,6 +3,7 @@ Django settings for travel_project project.
 """
 from pathlib import Path
 import os
+import dj_database_url # <-- ДОБАВЛЕНО ДЛЯ RENDER
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,8 +14,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-n4mtbz!t+7ltk4d(p8#e3
 # ВАЖНО: Для продакшена всегда False
 DEBUG = False
 
-# Разрешаем запросы с хостинга и локально
-ALLOWED_HOSTS = ['*', '.netrun.io', '127.0.0.1', 'localhost']
+# Разрешаем запросы с Render и локально
+ALLOWED_HOSTS = ['.onrender.com', '.netrun.io', '127.0.0.1', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -57,12 +58,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'travel_project.wsgi.application'
 
-# База данных: используем SQLite в постоянной папке /data (для Netrun)
+# База данных: Render автоматически передает DATABASE_URL для PostgreSQL
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/data/db.sqlite3' if os.path.exists('/data') else BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        # Если DATABASE_URL нет (локальная разработка), используем SQLite
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600
+    )
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -83,7 +85,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles' # Сюда collectstatic соберет файлы
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Медиа (загруженные картинки туров)
 MEDIA_URL = '/media/'

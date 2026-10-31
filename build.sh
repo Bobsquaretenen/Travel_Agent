@@ -2,13 +2,13 @@
 # Выходим при ошибке
 set -o errexit
 
-echo "--- Installing dependencies ---"
+echo "--- Установка зависимостей ---"
 pip install -r requirements.txt
 
-echo "--- Collecting static files ---"
+echo "--- Сбор статических файлов ---"
 python manage.py collectstatic --no-input
 
-echo "--- Applying migrations ---"
+echo "--- Применение миграций ---"
 python manage.py migrate
 
-echo "--- Build finished ---"
+echo "--- Сборка успешно завершена! ---"
