@@ -131,3 +131,26 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 302)  # Редирект в личный кабинет
         self.assertEqual(UserTour.objects.count(), 1)
         self.assertEqual(UserTour.objects.first().status, 'active')
+
+        def test_card_form_valid(self):
+            """Тест валидной формы привязки карты"""
+            form_data = {
+                'number': '1234 5678 9012 3456',
+                'expiry': '12/25',
+                'cvv': '123',
+                'pd_consent': True
+            }
+            form = CardForm(data=form_data)
+            self.assertTrue(form.is_valid())
+
+        def test_card_form_invalid_number(self):
+            """Тест формы карты: ввод букв вместо цифр"""
+            form_data = {
+                'number': 'abcd efgh ijkl mnop',
+                'expiry': '12/25',
+                'cvv': '123',
+                'pd_consent': True
+            }
+            form = CardForm(data=form_data)
+            self.assertFalse(form.is_valid())
+            self.assertIn('number', form.errors)

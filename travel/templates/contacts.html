@@ -63,7 +63,8 @@
                     {{ form.privacy }}
                     <label for="id_privacy" class="form__label_checkbox">
                         Я даю согласие на обработку персональных данных в соответствии с
-                        <a href="#" class="auth__link" target="_blank">Политикой конфиденциальности</a>. *
+                        <!-- ИЗМЕНЕНО: Ссылка на PDF -->
+                        <a href="{% static 'docs/privacy_policy.pdf' %}" class="auth__link" target="_blank">Политикой конфиденциальности</a>. *
                     </label>
                 </div>
                 <button type="submit" class="button button_theme_primary">Отправить отзыв</button>
