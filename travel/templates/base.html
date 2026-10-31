@@ -41,9 +41,7 @@
         </div>
     </header>
 
-
-
-        <main>
+    <main>
         <!-- Блок вывода системных уведомлений Django -->
         {% if messages %}
         <div class="container" style="margin-top: 20px;">
@@ -87,7 +85,8 @@
         </div>
         <div class="footer__bottom">
             <p>&copy; 2025 Travel Agency. Все права защищены.</p>
-            <p><a href="#" class="footer__link">Политика конфиденциальности</a></p>
+            <!-- ИЗМЕНЕНО: Добавлена ссылка на PDF -->
+            <p><a href="{% static 'docs/privacy_policy.pdf' %}" class="footer__link" target="_blank">Политика конфиденциальности</a></p>
         </div>
     </footer>
 

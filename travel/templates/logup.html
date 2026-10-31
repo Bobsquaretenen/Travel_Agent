@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 <section class="auth section">
@@ -48,7 +49,7 @@
                     {{ form.pd_consent }}
                     <label for="id_pd_consent" class="form__label_checkbox">
                         Я даю согласие на обработку моих персональных данных в соответствии с
-                        <!-- ИЗМЕНЕНО: Ссылка на PDF -->
+                        <!-- Ссылка на PDF -->
                         <a href="{% static 'docs/privacy_policy.pdf' %}" class="auth__link" target="_blank">Политикой конфиденциальности</a>. *
                     </label>
                 </div>
