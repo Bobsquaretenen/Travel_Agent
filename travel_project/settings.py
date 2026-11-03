@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'csp',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -31,12 +32,14 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     # ВАЖНО: WhiteNoise должен идти сразу после SecurityMiddleware
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'csp.middleware.CSPMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'travel_agent.middleware.SecurityHeadersMiddleware',
 ]
 
 ROOT_URLCONF = 'travel_project.urls'
@@ -103,3 +106,44 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 CSRF_FAILURE_VIEW = 'travel_agent.views.csrf_failure'
+
+# Перенаправлять весь HTTP-трафик на HTTPS
+SECURE_SSL_REDIRECT = True
+
+# HSTS (Strict-Transport-Security): заставляем браузер использовать только HTTPS
+SECURE_HSTS_SECONDS = 31536000  # 1 год (рекомендуемое значение)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Защита от MIME-sniffing (уже включена по умолчанию, но фиксируем явно)
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Безопасные Cookies (работают только по HTTPS)
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+CONTENT_SECURITY_POLICY = {
+    "DIRECTIVES": {
+        "default-src": ["'self'"],
+        "script-src": ["'self'"],
+        "style-src": [
+            "'self'",
+            "'unsafe-inline'",  # Нужно для встроенных стилей (если есть)
+            "https://fonts.googleapis.com",
+        ],
+        "font-src": [
+            "'self'",
+            "https://fonts.gstatic.com",
+        ],
+        "img-src": [
+            "'self'",
+            "data:",
+            "https://images.unsplash.com",  # Картинки с Unsplash
+        ],
+        "frame-src": [
+            "'self'",
+            "https://yandex.ru",  # Карта
+        ],
+        "connect-src": ["'self'"],
+    }
+}
